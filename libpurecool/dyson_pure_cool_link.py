@@ -227,6 +227,7 @@ class DysonPureCoolLink(DysonDevice):
         :param kwargs Arguments
         :return payload dictionary
         """
+        auto_mode = kwargs.get('auto_mode')
         fan_mode = kwargs.get('fan_mode')
         oscillation = kwargs.get('oscillation')
         fan_speed = kwargs.get('fan_speed')
@@ -236,6 +237,8 @@ class DysonPureCoolLink(DysonDevice):
         sleep_timer = kwargs.get('sleep_timer')
         reset_filter = kwargs.get('reset_filter')
 
+        f_auto_mode = auto_mode.value if auto_mode \
+            else self._current_state.auto_mode
         f_mode = fan_mode.value if fan_mode \
             else self._current_state.fan_mode
         f_speed = fan_speed.value if fan_speed \
@@ -253,8 +256,10 @@ class DysonPureCoolLink(DysonDevice):
         f_reset_filter = reset_filter.value if reset_filter \
             else "STET"
 
+
         return {
-            "fmod": f_mode,
+            "auto": f_auto_mode,
+            "fnst": f_mode,
             "fnsp": f_speed,
             "oson": f_oscillation,
             "sltm": f_sleep_timer,  # sleep timer

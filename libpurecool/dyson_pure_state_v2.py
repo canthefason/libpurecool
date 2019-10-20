@@ -126,8 +126,19 @@ class DysonPureCoolV2State:
     def filter_life(self):
         """Filter life. - Backwards compat with non-v2"""
         hours_in_year = 365 * 24
-        hours_carbon = (float(self._carbon_filter_state) / 100.0) * hours_in_year
-        hours_hepa = (float(self._hepa_filter_state) / 100.0) * hours_in_year
+        # Since Carbon and Hepa filters are combined for HP06, Carbon state is
+        # being sent as INV for this model.
+        try:
+            hours_carbon = (float(self._carbon_filter_state) / 100.0) * hours_in_year
+        except ValueError:
+            hours_carbon = 9999
+
+        try:
+            hours_hepa = (float(self._hepa_filter_state) / 100.0) * hours_in_year
+        except ValueError:
+            hours_hepa = 9999
+
+
         return min(hours_carbon, hours_hepa)
 
     @property
